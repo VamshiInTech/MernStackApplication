@@ -1,16 +1,25 @@
-version: '3'
 services:
   frontend:
     build: ./frontend
     ports:
-      - '3000:3000'
+      - "3000:3000"
     depends_on:
       - backend
 
   backend:
     build: ./backend
     ports:
-      - '${PORT}:${PORT}'
-    env_file:
-      - .env
-      
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - MONG_URI=mongodb://mongo:27017/workouts
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
